@@ -44,6 +44,18 @@ http://dx.doi.org/10.1007/s10260-007-0048-6
 \author{Matias Salibian-Barrera, matias@stat.ubc.ca}
 \note{See the github repository \link{https://github.com/msalibian/FRB}
 }
+\examples{
+library(robustbase)
+a <- lmrob(LNOx ~ LNOxEm + sqrtWS, data=NOxEmissions)
+tmp <- frb(lmrob.object=a, nboot=1000, return.coef=FALSE)
+# Estimated SE's for estimated regression coefficients  
+sqrt(diag(tmp))
+# [1] 0.056422169 0.007782671 0.012662991
+# compare with SE's based on the asymptotic approximation
+sqrt(diag(summary(a)$cov))
+# (Intercept)      LNOxEm      sqrtWS 
+# 0.054256788 0.007482346 0.013222502 
+}
 
 \keyword{robustness}
 \keyword{robust regression}

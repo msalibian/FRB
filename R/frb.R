@@ -1,8 +1,10 @@
 
 frb <- function(lmrob.object, nboot=1000, return.coef = FALSE) # , seed=33) 
 {
-  lmrob.Psi <- tukeyPsi1
-  lmrob.Chi <- tukeyChi
+  lmrob.Chi <- Mchi
+  lmrob.Psi <- Mpsi
+  # lmrob.Psi <- tukeyPsi1
+  # lmrob.Chi <- tukeyChi
   co <- lmrob.object$control
   tuning.psi <- co$tuning.psi
   tuning.chi <- co$tuning.chi
@@ -19,18 +21,18 @@ frb <- function(lmrob.object, nboot=1000, return.coef = FALSE) # , seed=33)
   re.s <- as.vector( yy - xx %*% beta.s )
   scale <- lmrob.object$scale
   # w.p <- Psi'(r/sigma)
-  w.p <- lmrob.Psi(x = re.mm / scale, cc=tuning.psi, deriv=1) 
+  w.p <- lmrob.Psi(x = re.mm / scale, psi='bisquare', cc=tuning.psi, deriv=1) 
   # a more efficient way of doing this?
   a <- t(xx) %*% diag(w.p) %*% xx 
   # w <- Psi(r/sigma)/r
-  w <- lmrob.Psi(x= re.mm / scale, cc=tuning.psi, deriv=0) / re.mm 
+  w <- lmrob.Psi(x= re.mm / scale, psi='bisquare', cc=tuning.psi, deriv=0) / re.mm 
   # a more efficient way of doing this?
   b <- t(xx) %*% diag(w) %*% xx 
   # w.pp <- Psi'(r/sigma)*r/sigma
   w.pp <- w.p * re.mm / scale  
   d <- as.vector( t(xx) %*% w.pp ) 
   # e <- \sum Chi'(r/sigma)*r/sigma
-  e <- sum( lmrob.Chi(re.s / scale, cc=tuning.chi, deriv=1) * re.s / scale ) 
+  e <- sum( lmrob.Chi(re.s / scale, psi='bisquare', cc=tuning.chi, deriv=1) * re.s / scale ) 
   d <- d / 2 * (n - p) * scale / e;
   x2 <- solve(a) 
   x3 <- x2 %*% b * scale
@@ -38,7 +40,7 @@ frb <- function(lmrob.object, nboot=1000, return.coef = FALSE) # , seed=33)
   # correction matrix is in x3
   # correction vector is in v2
   # set.seed(seed)
-  ss <- lmrob.Chi( re.s/scale, cc=tuning.chi, deriv=0 ) 
+  ss <- lmrob.Chi( re.s/scale, psi='bisquare', cc=tuning.chi, deriv=0 ) 
   # ss <- Chi(re.s/scale)
   boot.beta <- matrix(0, nboot, p)
   a <- .C('R_frb', as.double(xx), as.double(yy), as.double(w), as.integer(n), 

@@ -5,6 +5,13 @@ This package implements the Fast and Robust Bootstrap as proposed in
 [Salibian-Barrera, M., Van Aels, S. and Willems, G. (2008)](http://dx.doi.org/10.1007/s10260-007-0048-6) for robust regression estimators (MM-estimators) computed with 
 `robustbase::lmrob`. 
 
+To install it use the following commands (assuming that you have
+the `devtools` package from [CRAN](https://cran.r-project.org) 
+already installed): 
+```
+library(devtools)
+install_github("msalibian/FRB")
+```
 To use it (after installation), simply call `frb` on an `lmrob` object as computed 
 by `robustbase::lmrob`. Here's an example:
 ```

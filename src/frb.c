@@ -31,7 +31,7 @@ void mat_mat(double **, double **, double **, int, int, int);
 void disp_vec(double *, int);
 void disp_mat(double **, int, int);
 
-register int i,j,k;
+register int i,j;
 double  **x, **x3,  **x2, **x4, *v_aux, *v, s=0;
 int *indices;
 

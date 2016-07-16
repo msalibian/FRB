@@ -12,9 +12,10 @@ library(robustbase)
 library(FRB)
 a <- lmrob(LNOx ~ LNOxEm + sqrtWS, data=NOxEmissions)
 tmp <- frb(lmrob.object=a, nboot=1000, return.coef=FALSE)
+# Estimated SE's for estimated regression coefficients  
 sqrt(diag(tmp))
 # [1] 0.056422169 0.007782671 0.012662991
-# compare with asymptotic approximation
+# compare with SE's based on the asymptotic approximation
 sqrt(diag(summary(a)$cov))
 # (Intercept)      LNOxEm      sqrtWS 
 # 0.054256788 0.007482346 0.013222502 

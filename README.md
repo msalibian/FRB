@@ -18,11 +18,14 @@ by `robustbase::lmrob`. Here's an example:
 library(robustbase)
 library(FRB)
 a <- lmrob(LNOx ~ LNOxEm + sqrtWS, data=NOxEmissions)
+set.seed(123)
 tmp <- frb(lmrob.object=a, nboot=1000, return.coef=FALSE)
-# Estimated SE's for estimated regression coefficients  
+
+##  Estimated SE's for estimated regression coefficients  
 sqrt(diag(tmp))
-# [1] 0.056422169 0.007782671 0.012662991
-# compare with SE's based on the asymptotic approximation
+# [1] 0.054340731 0.007633753 0.013364467
+
+## compare with SE's based on the asymptotic approximation
 sqrt(diag(summary(a)$cov))
 # (Intercept)      LNOxEm      sqrtWS 
 # 0.054256788 0.007482346 0.013222502 

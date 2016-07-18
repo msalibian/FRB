@@ -8,13 +8,13 @@ This package implements the Fast and Robust Bootstrap as proposed in
 To install it use the following commands (assuming that you have
 the `devtools` package from [CRAN](https://cran.r-project.org) 
 already installed): 
-```
+```R
 library(devtools)
 install_github("msalibian/FRB")
 ```
 To use it (after installation), simply call `frb` on an `lmrob` object as computed 
 by `robustbase::lmrob`. Here's an example:
-```
+```R
 library(robustbase)
 library(FRB)
 a <- lmrob(LNOx ~ LNOxEm + sqrtWS, data=NOxEmissions)

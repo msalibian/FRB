@@ -1,7 +1,7 @@
 Fast and Robust Bootstrap
 ================
 Matias Salibian
-July 30, 2016
+2016-07-30
 
 Fast and Robust Bootstrap
 -------------------------

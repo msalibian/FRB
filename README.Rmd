@@ -1,7 +1,7 @@
 ---
 title: "Fast and Robust Bootstrap"
 author: "Matias Salibian"
-date: "July 30, 2016"
+date: "`r format(Sys.Date())`"
 output: github_document
 ---
 

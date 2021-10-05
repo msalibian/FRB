@@ -1,11 +1,50 @@
-
+#' Fast and Robust Bootstrap
+#'
+#' This function computes the Fast and Robust Bootstrap for linear models
+#' using etc. etc. It relies on the function \code{lmrob} of 
+#' \code{package:robustbase}
+#'
+#' This function computes the Fast and Robust Bootstrap for linear models
+#' using etc. etc. It relies on the function \code{lmrob} of 
+#' \code{package:robustbase}
+#'
+#' @param lmrob.object a robust linear regression fit as returned by \code{lmrob} of \code{package:robustbase}
+#' @param nboot an integer indicating the number of bootstrap samples to use
+#' @param return.coef a logical (boolean) value indicating whether to return a matrix containing
+#' the \code{nboot} vectors of bootstrapped regression coefficient estimates. 
+#' @param return.indices a logical (boolean) value indicating whether to return a matrix containing
+#' the vectors of indices corresponding to each bootstrap sample used. 
+#'
+#' @return A list with the following possible components:
+#' \item{coef}{If the argument \code{return.coef == TRUE}, a matrix with 
+#' \code{nboot} rows containing the bootstrapped robust regression estimates}
+#' \item{var}{The sample covariance matrix of the bootstrapped regression estimates. This
+#' is an estimate for the asymptotic covariance matrix of the robust regression estimator.}
+#' \item{indices}{If the argument \code{return.indices == TRUE}, a matrix with 
+#' \code{nboot} rows containing the indices of the bootstrap samples used.}
+#'
+#' @author Matias Salibian-Barrera, \email{matias@stat.ubc.ca}
+#' @references Salibian-Barrera M, Zamar RH, Bootstrapping robust estimates of regression,
+#' Annals of Statistics, (2002) 30:556-582. \doi{10.1214/aos/1021379865}
+#' Salibian-Barrera M, Van Aelst S, Willerns G., Fast and robust bootstrap, 
+#' Statistical Methods and Applications, (2008) 17:41-71. \doi{10.1007/s10260-007-0048-6}
+#' 
+#' @seealso \code{package:robustbase}
+#'
+#' @examples
+#' library(robustbase)
+#' a <- lmrob(LNOx ~ LNOxEm + sqrtWS, data=NOxEmissions)
+#' set.seed(123)
+#' tmp <- frb(lmrob.object=a, nboot=1000, return.coef=FALSE)
+#' sqrt(diag(tmp$var))
+#' # compare with SE's based on the asymptotic approximation
+#' sqrt(diag(summary(a)$cov))
+#
+#' @export
 frb <- function(lmrob.object, nboot=1000, return.coef = FALSE, 
-                return.indices = FALSE) # , seed=33) 
-{
+                return.indices = FALSE) {
   lmrob.Chi <- Mchi
   lmrob.Psi <- Mpsi
-  # lmrob.Psi <- tukeyPsi1
-  # lmrob.Chi <- tukeyChi
   co <- lmrob.object$control
   tuning.psi <- co$tuning.psi
   tuning.chi <- co$tuning.chi
@@ -40,7 +79,6 @@ frb <- function(lmrob.object, nboot=1000, return.coef = FALSE,
   v2 <- x2 %*% d # / scale
   # correction matrix is in x3
   # correction vector is in v2
-  # set.seed(seed)
   ss <- lmrob.Chi( re.s/scale, psi='bisquare', cc=tuning.chi, deriv=0 ) 
   # ss <- Chi(re.s/scale)
   boot.beta <- matrix(0, nboot, p)
@@ -59,5 +97,3 @@ frb <- function(lmrob.object, nboot=1000, return.coef = FALSE,
   if(!return.indices) tmp$indices <- NULL
   return(tmp)
 }
-
-

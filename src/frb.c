@@ -14,7 +14,6 @@ void R_frb( double *xx, double *y, double *w, int *n, int *p, double *beta_m,
 		double *xx3, double *v2, int *bind)
 {
 
-
 void sampler_i(int n, int *x);
 void reset_mat(double**, int, int);
 void reset_vec(double*, int);
@@ -123,8 +122,8 @@ register int i,j,k;
 double *kk,s;
 p = *P;
 if ((pp = (int *) malloc(p*sizeof(int)))==NULL)
-	{ printf("\nNot enough memory in LU\n");
-	  exit(1); }
+	{ Rprintf("\nNot enough memory in LU\n");
+	  Rf_error("\nNot enough memory in LU\n"); }
 /* pp vector storing the permutations */
 for(j=0;j<p;j++)   /* cols */
 { pp[j]=j;

@@ -1,5 +1,6 @@
 
-frb <- function(lmrob.object, nboot=1000, return.coef = FALSE) # , seed=33) 
+frb <- function(lmrob.object, nboot=1000, return.coef = FALSE, 
+                return.indices = FALSE) # , seed=33) 
 {
   lmrob.Chi <- Mchi
   lmrob.Psi <- Mpsi
@@ -43,13 +44,20 @@ frb <- function(lmrob.object, nboot=1000, return.coef = FALSE) # , seed=33)
   ss <- lmrob.Chi( re.s/scale, psi='bisquare', cc=tuning.chi, deriv=0 ) 
   # ss <- Chi(re.s/scale)
   boot.beta <- matrix(0, nboot, p)
+  boot.indices <- matrix(0, nboot, n)
   a <- .C('R_frb', as.double(xx), as.double(yy), as.double(w), as.integer(n), 
           as.integer(p), as.double(beta.mm), as.double(scale), 
           as.double(ss), bb=as.double(boot.beta), as.integer(nboot),
-          as.double(x3), as.double(v2), PACKAGE="FRB")$bb
-  a <- matrix(a, nboot, p)
-  if(return.coef) return(a) 
-  else return(var(a))
+          as.double(x3), as.double(v2), 
+          bind = as.integer(boot.indices), PACKAGE="FRB")
+  ab <- matrix(a$bb, nboot, p)
+  ib <- matrix(a$bind, nboot, n)
+  tmp <- list(coef=ab, var=var(ab), indices = ib)
+  if(return.coef) 
+    tmp$var <- NULL 
+  else tmp$coef <- NULL
+  if(!return.indices) tmp$indices <- NULL
+  return(tmp)
 }
 
 

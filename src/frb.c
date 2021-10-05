@@ -11,7 +11,7 @@
 
 void R_frb( double *xx, double *y, double *w, int *n, int *p, double *beta_m,
 		double *scale, double *chi_res_s, double *bbetas, int *nboot,
-		double *xx3, double *v2)
+		double *xx3, double *v2, int *bind)
 {
 
 
@@ -29,6 +29,7 @@ void dif_vec(double *, double *, double *, int);
 void mat_vec(double **, double *, double *, int, int);
 void mat_mat(double **, double **, double **, int, int, int);
 void disp_vec(double *, int);
+void disp_vec_int(int *, int);
 void disp_mat(double **, int, int);
 
 register int i,j;
@@ -93,6 +94,9 @@ for(i=0; i < (*nboot); i++) {
 	for(j=0;j<(*p);j++) {
 		bbetas[j*(*nboot)+i]=v[j];
 	};
+	for(j=0; j< (*n); j++) {
+	  bind[j*(*nboot)+i]=indices[j] + 1;
+	}
 };
 
 free(indices);
@@ -149,14 +153,12 @@ for(j=0;j<p;j++)   /* cols */
 };    /* cierra el for de j */
 for(i=0;i<p;i++)
 	{ s=0.0;
-	  for(j=0;j<i;j++)
-	    s += a[i][j] * x[j];
-	    x[i] = a[i][p] - s;          /* y[i]=a[i][p] */
+	  for(j=0;j<i;j++) s += a[i][j] * x[j];
+	  x[i] = a[i][p] - s;          /* y[i]=a[i][p] */
 	};
 for(i=(p-1);i>=0;i--)
 	{ s=0;
-	  for(j=(i+1);j<p;j++)
-	    s += a[i][j] * x[j];
+	  for(j=(i+1);j<p;j++) s += a[i][j] * x[j];
 	  x[i] = (x[i] - s) / a[i][i];
 	  };
 free(pp);
@@ -246,6 +248,14 @@ register int i;
 Rprintf("\n");
 for(i=0;i<n; i++) Rprintf("%lf ",a[i]);
 Rprintf("\n");
+}
+
+void disp_vec_int(int *a, int n)
+{
+  register int i;
+  Rprintf("\n");
+  for(i=0;i<n; i++) Rprintf("%ld ",a[i]);
+  Rprintf("\n");
 }
 
 

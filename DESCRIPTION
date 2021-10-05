@@ -1,9 +1,9 @@
 Package: FRB
 Type: Package
 Title: Fast and Robust Bootstrap
-Version: 0.2
-Date: 2012-01-09
-Author: Matias 
+Version: 0.3
+Date: 2021-10-04
+Author: Matias Salibian Barrera
 Maintainer: Matias <matias@stat.ubc.ca>
 Description: More about what it does (maybe more than one line)
 License: GPL 2.0

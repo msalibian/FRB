@@ -22,6 +22,9 @@ frb(lmrob.object, nboot = 1000, return.coef = FALSE)
   regression estimators. If \code{FALSE} (default) then the function
   returns the estimated covariance matrix (\code{p} by \code{p}) for the
   MM-regression estimator.}
+  \item{return.indices}{ A logical value. If \code{TRUE} then the function
+  returns a matrix of \code{nboot} by \code{n}, with the i-th row containing
+  the indices of the i-th bootstrap sample used.}
 }
 \details{
 The fast and robust bootstrap as described in 
@@ -42,15 +45,16 @@ Salibian-Barrera, M., Van Aels, S. and Willems, G. (2008). Fast and robust boots
 http://dx.doi.org/10.1007/s10260-007-0048-6
 }
 \author{Matias Salibian-Barrera, matias@stat.ubc.ca}
-\note{See the github repository \link{https://github.com/msalibian/FRB}
+\note{See the github repository \code{https://github.com/msalibian/FRB}
 }
 \examples{
 library(robustbase)
 a <- lmrob(LNOx ~ LNOxEm + sqrtWS, data=NOxEmissions)
+set.seed(123)
 tmp <- frb(lmrob.object=a, nboot=1000, return.coef=FALSE)
 # Estimated SE's for estimated regression coefficients  
-sqrt(diag(tmp))
-# [1] 0.056422169 0.007782671 0.012662991
+sqrt(diag(tmp$var))
+# [1] 0.054340731 0.007633753 0.013364467
 # compare with SE's based on the asymptotic approximation
 sqrt(diag(summary(a)$cov))
 # (Intercept)      LNOxEm      sqrtWS 

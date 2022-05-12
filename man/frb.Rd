@@ -4,7 +4,13 @@
 \alias{frb}
 \title{Fast and Robust Bootstrap}
 \usage{
-frb(lmrob.object, nboot = 1000, return.coef = FALSE, return.indices = FALSE)
+frb(
+  lmrob.object,
+  nboot = 1000,
+  return.coef = FALSE,
+  return.indices = FALSE,
+  centered = TRUE
+)
 }
 \arguments{
 \item{lmrob.object}{a robust linear regression fit as returned by \code{lmrob} of \code{package:robustbase}}
@@ -16,6 +22,9 @@ the \code{nboot} vectors of bootstrapped regression coefficient estimates.}
 
 \item{return.indices}{a logical (boolean) value indicating whether to return a matrix containing
 the vectors of indices corresponding to each bootstrap sample used.}
+
+\item{centered}{a logical value indicating whether to return the centered bootstrapped
+regression coefficients (centered around the MM regression estimator). Defaults to \code{TRUE}.}
 }
 \value{
 A list with the following possible components:

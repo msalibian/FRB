@@ -14,6 +14,9 @@
 #' the \code{nboot} vectors of bootstrapped regression coefficient estimates. 
 #' @param return.indices a logical (boolean) value indicating whether to return a matrix containing
 #' the vectors of indices corresponding to each bootstrap sample used. 
+#' @param centered a logical value indicating whether to return the centered bootstrapped
+#' regression coefficients (centered around the MM regression estimator). Defaults to \code{TRUE}.
+#'
 #'
 #' @return A list with the following possible components:
 #' \item{coef}{If the argument \code{return.coef == TRUE}, a matrix with 
@@ -42,7 +45,7 @@
 #
 #' @export
 frb <- function(lmrob.object, nboot=1000, return.coef = FALSE, 
-                return.indices = FALSE) {
+                return.indices = FALSE, centered=TRUE) {
   lmrob.Chi <- Mchi
   lmrob.Psi <- Mpsi
   co <- lmrob.object$control
@@ -89,6 +92,7 @@ frb <- function(lmrob.object, nboot=1000, return.coef = FALSE,
           as.double(x3), as.double(v2), 
           bind = as.integer(boot.indices), PACKAGE="FRB")
   ab <- matrix(a$bb, nboot, p)
+  if(!centered) ab <- scale(ab, scale=FALSE, center = -beta.mm)
   ib <- matrix(a$bind, nboot, n)
   tmp <- list(coef=ab, var=var(ab), indices = ib)
   if(return.coef) 

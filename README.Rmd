@@ -6,7 +6,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
 ```
 
 ## Fast and Robust Bootstrap
@@ -20,8 +20,7 @@ To install it use the following commands (assuming that you have
 the `devtools` package from [CRAN](https://cran.r-project.org) 
 already installed): 
 ```R
-library(devtools)
-install_github("msalibian/FRB")
+devtools::install_github("msalibian/FRB")
 ```
 To use it (after installation), simply call `frb` on an `lmrob` object as computed 
 by `robustbase::lmrob`. Here's an example:
@@ -32,13 +31,14 @@ a <- lmrob(LNOx ~ LNOxEm + sqrtWS, data=NOxEmissions)
 set.seed(123)
 tmp <- frb(lmrob.object=a, nboot=1000, return.coef=FALSE)
 ```
+
 If the argument `return.coef` is set to `FALSE`, then
 `frb` returns the estimated covariance matrix of the
 robust regression estimators. For example, the
 estimated standard errors for each parameter estimate
 are
 ```{R ses}
-sqrt(diag(tmp))
+sqrt(diag(tmp$var))
 ```
 We can compare them with the 
 estimated standard errors given by the usual
@@ -47,4 +47,33 @@ asyptotic approximation:
 sqrt(diag(summary(a)$cov))
 ```
 
+If the argument `return.coef` is `TRUE` then 
+the returned list has an element `$coef` 
+that contains a matrix with `nboot` rows
+with a bootstrapped regression coefficient in 
+each of them. 
 
+The argument `return.indices` indicates whether
+to return 
+the matrix of the indices of the bootstrap samples. 
+
+The argument `centered` indicates whether the
+returned bootstrap regression coefficients 
+should be centered ($\hat{\beta}^* - \hat{\beta}_n$)
+or not. For example:
+```{r centering}
+# by default the bootstrapped estimators are centered
+set.seed(123)
+tmp <- frb(lmrob.object=a, nboot=1000, return.coef=TRUE)
+
+# we now add the regression estimator to each bootstrapped one
+tmp2 <- scale(tmp$coef, scale=FALSE, center=-coef(a))
+
+# use the argument centered=FALSE to return the non-centered 
+# bootstrapped estimators instead
+set.seed(123)
+tmp3 <- frb(lmrob.object=a, nboot=1000, return.coef=TRUE, centered=FALSE)
+
+# and check that the results are the same
+all.equal(tmp2, tmp3$coef)
+```

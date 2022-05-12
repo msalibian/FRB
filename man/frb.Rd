@@ -29,7 +29,7 @@ regression coefficients (centered around the MM regression estimator). Defaults 
 \value{
 A list with the following possible components:
 \item{coef}{If the argument \code{return.coef == TRUE}, a matrix with 
-\code{nboot} rows containing the bootstrapped robust regression estimates}
+\code{nboot} rows containing the bootstrapped robust regression estimates.}
 \item{var}{The sample covariance matrix of the bootstrapped regression estimates. This
 is an estimate for the asymptotic covariance matrix of the robust regression estimator.}
 \item{indices}{If the argument \code{return.indices == TRUE}, a matrix with 
